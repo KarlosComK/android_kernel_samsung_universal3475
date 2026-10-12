@@ -1172,16 +1172,6 @@ struct ion_client *ion_client_create(struct ion_device *dev,
 	rb_link_node(&client->node, parent, p);
 	rb_insert_color(&client->node, &dev->clients);
 
-	client->debug_root = debugfs_create_file(client->display_name, 0664,
-						dev->clients_debug_root,
-						client, &debug_client_fops);
-	if (!client->debug_root) {
-		char buf[256], *path;
-		path = dentry_path(dev->clients_debug_root, buf, 256);
-		pr_err("Failed to create client debugfs at %s/%s\n",
-			path, client->display_name);
-	}
-
 	up_write(&dev->lock);
 
 	return client;
@@ -1218,7 +1208,6 @@ void ion_client_destroy(struct ion_client *client)
 	if (client->task)
 		put_task_struct(client->task);
 	rb_erase(&client->node, &dev->clients);
-	debugfs_remove_recursive(client->debug_root);
 	up_write(&dev->lock);
 
 	kfree(client->display_name);
@@ -2530,12 +2519,6 @@ struct ion_device *ion_device_create(long (*custom_ioctl)
 	idev->heaps_debug_root = debugfs_create_dir("heaps", idev->debug_root);
 	if (!idev->heaps_debug_root) {
 		pr_err("ion: failed to create debugfs heaps directory.\n");
-		goto debugfs_done;
-	}
-	idev->clients_debug_root = debugfs_create_dir("clients",
-						idev->debug_root);
-	if (!idev->clients_debug_root) {
-		pr_err("ion: failed to create debugfs clients directory.\n");
 		goto debugfs_done;
 	}
 
