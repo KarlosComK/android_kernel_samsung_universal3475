@@ -819,6 +819,7 @@
 			gpio_core_en = <&gpd1 0 0x1>; /* CAM_CORE_EN */
 			gpio_mclk = <&gpe0 0 0x1>; /* MAIN_CAM_MCLK */
 			gpio_standby = <&gpf1 1 0x1>; /* MAIN_CAM_STBY */
+			gpio_standby_dtv = <&gpc2 3 0x1>; /* MAIN_CAM_STBY (J200BT) */
 			status = "okay";
 		};
 	};
@@ -849,6 +850,7 @@
 
 			gpio_reset = <&gpd0 4 0x1>;
 			gpio_standby = <&gpf1 0 0x1>; /* VT_CAM_STBY */
+			gpio_standby_dtv = <&gpc2 2 0x1>; /* VT_CAM_STBY (J200BT) */
 			gpio_mclk = <&gpe0 1 0x1>; /* VT_CAM_MCLK */
 			status = "okay";
 		};
@@ -869,6 +871,7 @@
 
 			gpio_reset = <&gpd0 4 0x1>;
 			gpio_standby = <&gpf1 0 0x1>; /* VT_CAM_STBY */
+			gpio_standby_dtv = <&gpc2 2 0x1>; /* VT_CAM_STBY (J200BT) */
 			gpio_mclk = <&gpe0 1 0x1>; /* VT_CAM_MCLK */
 			status = "okay";
 		};

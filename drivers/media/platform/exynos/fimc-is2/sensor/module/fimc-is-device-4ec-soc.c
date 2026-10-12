@@ -24,6 +24,7 @@
 #include <linux/moduleparam.h>
 #include <linux/vmalloc.h>
 #include <linux/platform_device.h>
+#include <linux/init.h>
 #ifdef CONFIG_OF
 #include <linux/of_gpio.h>
 #endif
@@ -3993,6 +3994,13 @@ static int sensor_4ec_power_setpin(struct i2c_client *client,
 	}
 
 	gpio_standby = of_get_named_gpio(dnode, "gpio_standby", 0);
+#if defined(CONFIG_CAMERA_J2LTE)
+	if (strstr(saved_command_line, "J200BT") || strstr(saved_command_line, "DTV")) {
+		int alt = of_get_named_gpio(dnode, "gpio_standby_dtv", 0);
+		if (gpio_is_valid(alt))
+			gpio_standby = alt;
+	}
+#endif
 	if (!gpio_is_valid(gpio_standby)) {
 		err("%s failed to get gpio_standby\n",__func__);
 		return -EINVAL;
