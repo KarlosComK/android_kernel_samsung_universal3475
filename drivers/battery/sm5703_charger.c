@@ -842,7 +842,6 @@ static int sec_chg_get_property(struct power_supply *psy,
 			val->intval = sm5703_get_charging_health(charger);
 			break;
 		case POWER_SUPPLY_PROP_CURRENT_MAX:
-			sm5703_test_read(charger->sm5703->i2c_client);
 			val->intval = sm5703_get_fast_charging_current(charger->sm5703->i2c_client);
 			break;
 		case POWER_SUPPLY_PROP_CURRENT_AVG:
