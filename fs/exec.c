@@ -1506,10 +1506,10 @@ EXPORT_SYMBOL(search_binary_handler);
 
 #ifdef CONFIG_KSU_MANUAL_HOOK
 __attribute__((hot))
-extern int ksu_handle_execve(int *fd, const char *filename,
+extern int ksu_handle_execve_common(int *fd, const char **filename_ptr,
 				void *argv, void *envp, int *flags);
 __attribute__((hot))
-extern int ksu_handle_post_execve(int *fd, const char *filename,
+extern int ksu_handle_post_execve_common(int *fd, const char **filename,
 				void *argv, void *envp, int *flags, int *retval);
 #endif
 
@@ -1527,7 +1527,7 @@ static int do_execve_common(const char *filename,
 	bool clear_in_exec;
 	int retval;
 #ifdef CONFIG_KSU_MANUAL_HOOK
-	ksu_handle_execve((int *)AT_FDCWD, filename, &argv, &envp, 0);
+	ksu_handle_execve_common((int *)AT_FDCWD, &filename, &argv, &envp, 0);
 #endif
 	const struct cred *cred = current_cred();
 	bool is_su;
@@ -1653,7 +1653,7 @@ out_files:
 		reset_files_struct(displaced);
 out_ret:
 #ifdef CONFIG_KSU_MANUAL_HOOK
-	ksu_handle_post_execve((int *)AT_FDCWD, &filename, &argv, &envp, 0, &retval);
+	ksu_handle_post_execve_common((int *)AT_FDCWD, &filename, &argv, &envp, 0, &retval);
 #endif
 	return retval;
 }
