@@ -32,14 +32,14 @@ jobs:
           git config --global http.sslVerify false
           git config --global url."https://".insteadOf git://
 
-      - name: Clone Google GCC toolchain
+      - name: Clone KudProject GCC toolchain
         run: |
           echo "Cloning GCC ARM32..."
-          git clone --depth=1 -b android-7.1.2_r36 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 /tmp/gcc-arm
+          git clone --depth=1 https://github.com/KudProject/arm-linux-androideabi-4.9 /tmp/gcc-arm
 
       - name: Verify toolchain
         run: |
-          /tmp/gcc-arm/bin/arm-eabi-gcc --version
+          /tmp/gcc-arm/bin/arm-linux-androideabi --version
 
       - name: Integrate BakaSU
         run: |
@@ -49,7 +49,7 @@ jobs:
         run: |
           export PATH="/tmp/gcc-arm/bin:${PATH}"
           export ARCH=${KERNEL_ARCH}
-          export CROSS_COMPILE="arm-eabi-"
+          export CROSS_COMPILE="arm-linux-androideabi-"
 
           mkdir -p out
 
