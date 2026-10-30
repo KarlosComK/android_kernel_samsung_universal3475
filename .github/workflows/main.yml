@@ -39,7 +39,7 @@ jobs:
 
       - name: Verify toolchain
         run: |
-          /tmp/gcc-arm/bin/arm-linux-androideabi --version
+          /tmp/gcc-arm/bin/arm-linux-androideabi-gcc --version
 
       - name: Integrate BakaSU
         run: |
