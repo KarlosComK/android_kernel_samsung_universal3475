@@ -41,6 +41,10 @@ jobs:
         run: |
           /tmp/gcc-arm/bin/arm-eabi-gcc --version
 
+      - name: Integrate BakaSU
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/Baka-SU/BakaSU/main/kernel/setup.sh" | bash
+
       - name: Build kernel
         run: |
           export PATH="/tmp/gcc-arm/bin:${PATH}"
