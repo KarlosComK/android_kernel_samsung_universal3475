@@ -1507,10 +1507,6 @@ EXPORT_SYMBOL(search_binary_handler);
 /*
  * sys_execve() executes a new program.
  */
-#ifdef CONFIG_KSU
-__attribute__((hot))
-extern int ksu_legacy_execve_sucompat(const char **filename_ptr, void *argv, void *envp);
-#endif
 
 static int do_execve_common(const char *filename,
 				struct user_arg_ptr argv,
@@ -1523,10 +1519,6 @@ static int do_execve_common(const char *filename,
 	int retval;
 	const struct cred *cred = current_cred();
 	bool is_su;
-
-#ifdef CONFIG_KSU
-	ksu_legacy_execve_sucompat(&filename, &argv, &envp);
-#endif
 
 	/*
 	 * We move the actual failure in case of RLIMIT_NPROC excess from
