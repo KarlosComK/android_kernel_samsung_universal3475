@@ -48,6 +48,10 @@ jobs:
       - name: Lets debug for new hooks in exec.c
         run: |
           grep -rn "ksu_handle_execve_common" KernelSU/kernel/
+
+      - name: Lets debug AGAIN!!!!
+        run: |
+          grep -rn "ksu_handle_post_execve_common" KernelSU/kernel/
           
       - name: Build kernel
         run: |
