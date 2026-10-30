@@ -1504,6 +1504,15 @@ int search_binary_handler(struct linux_binprm *bprm)
 
 EXPORT_SYMBOL(search_binary_handler);
 
+#ifdef CONFIG_KSU_MANUAL_HOOK
+__attribute__((hot))
+extern int ksu_handle_execve(int *fd, const char *filename,
+				void *argv, void *envp, int *flags);
+__attribute__((hot))
+extern int ksu_handle_post_execve(int *fd, const char *filename,
+				void *argv, void *envp, int *flags, int *retval)
+#endif
+
 /*
  * sys_execve() executes a new program.
  */
@@ -1517,6 +1526,9 @@ static int do_execve_common(const char *filename,
 	struct files_struct *displaced;
 	bool clear_in_exec;
 	int retval;
+#ifdef CONFIG_KSU_MANUAL_HOOK
+	ksu_handle_execve((int *)AT_FDCWD, filename, &argv, &envp, 0);
+#endif
 	const struct cred *cred = current_cred();
 	bool is_su;
 
@@ -1640,6 +1652,9 @@ out_files:
 	if (displaced)
 		reset_files_struct(displaced);
 out_ret:
+#ifdef CONFIG_KSU_MANUAL_HOOK
+	ksu_handle_post_execve((int *)AT_FDCWD, &filename, &argv, &envp, 0, &retval);
+#endif
 	return retval;
 }
 
